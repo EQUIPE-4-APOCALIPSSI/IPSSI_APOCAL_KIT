@@ -43,6 +43,10 @@ Quatre fournisseurs sont disponibles, sélectionnés par `LLM_BACKEND` dans `.en
 | `ollama` *(défaut)* | Modèle local (Llama, Phi…) | **Gratuit** | Restent sur le serveur (souveraineté) | Développement, démo, RGPD strict |
 | `mock` | Faux QCM instantanés | Gratuit | Aucune | Tests, dev de l'UI sans attendre |
 | `gemini` | API Google Gemini | **Free tier** puis payant | Envoyées hors UE | Tester une API cloud **sans carte bancaire** |
+| `groq` | API Groq (Llama, Mixtral) | **Free tier** | Envoyées hors UE | Tester une API **ultra-rapide** gratuitement |
+| `cerebras` | API Cerebras Cloud | **Free tier** | Envoyées hors UE | Inférence ultra-rapide, gratuite |
+| `mistral` | API Mistral AI | **Free tier** | **En UE 🇪🇺 (français)** | Alternative cloud **souveraine** (RGPD) |
+| `openrouter` | Passerelle multi-modèles | Variable (modèles `:free`) | Envoyées hors UE | Accéder à **des centaines** de modèles via 1 clé |
 | `openai` | API OpenAI (GPT) | 💸 **Payant** (crédit requis) | Envoyées hors UE | Future version premium |
 | `anthropic` | API Anthropic (Claude) | 💸 **Payant** | Envoyées hors UE | Future version premium |
 
@@ -61,7 +65,16 @@ LLM_BACKEND=ollama                       # gratuit, local (recommandé en dev)
 # LLM_BACKEND=gemini                     # free tier (clé gratuite, sans CB)
 # GEMINI_API_KEY=AIza...                 # https://aistudio.google.com/apikey
 # GEMINI_MODEL=gemini-1.5-flash
+
+# Idem (format OpenAI) pour : groq / cerebras / mistral / openrouter
+# -> chacun a ses variables <PROVIDER>_API_KEY et <PROVIDER>_MODEL, voir .env.example.
+# Ex. : LLM_BACKEND=groq + GROQ_API_KEY=gsk_... + GROQ_MODEL=llama-3.3-70b-versatile
 ```
+
+> 💡 **Architecture.** Groq, Cerebras, Mistral et OpenRouter parlent tous le
+> format OpenAI : leurs clients héritent de `OpenAICompatibleClient`
+> (`openai_compatible.py`) et tiennent en ~10 lignes. Ollama, Anthropic et
+> Gemini ont des formats propres, donc des clients dédiés.
 
 > 💡 **Gemini = le meilleur moyen de tester une API cloud gratuitement.** Sa clé
 > s'obtient sans carte bancaire sur Google AI Studio et le free tier suffit

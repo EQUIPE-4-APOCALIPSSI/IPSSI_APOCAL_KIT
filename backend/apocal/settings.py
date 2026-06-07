@@ -174,12 +174,16 @@ CORS_ALLOW_CREDENTIALS = True
 # ----------------------------------------------------------------------------
 # Intégration LLM (Ollama)
 # ----------------------------------------------------------------------------
-# Fournisseur de génération de quiz. 5 valeurs possibles :
-#   "ollama"    -> modèle LOCAL gratuit (défaut, recommandé en développement)
-#   "gemini"    -> API Google Gemini (CLOUD, FREE TIER disponible)
-#   "openai"    -> API OpenAI (CLOUD, PAYANT, future version premium)
-#   "anthropic" -> API Anthropic / Claude (CLOUD, PAYANT, future version premium)
-#   "mock"      -> faux QCM instantanés (tests / dev sans LLM)
+# Fournisseur de génération de quiz. 9 valeurs possibles :
+#   "ollama"     -> modèle LOCAL gratuit (défaut, recommandé en développement)
+#   "gemini"     -> API Google Gemini (CLOUD, free tier)
+#   "groq"       -> API Groq, inférence très rapide (CLOUD, free tier)
+#   "cerebras"   -> API Cerebras Cloud, très rapide (CLOUD, free tier)
+#   "mistral"    -> API Mistral AI, fournisseur EUROPÉEN (CLOUD, free tier)
+#   "openrouter" -> passerelle multi-modèles (CLOUD, modèles ":free" dispo)
+#   "openai"     -> API OpenAI (CLOUD, PAYANT, future version premium)
+#   "anthropic"  -> API Anthropic / Claude (CLOUD, PAYANT, future version premium)
+#   "mock"       -> faux QCM instantanés (tests / dev sans LLM)
 LLM_BACKEND  = config("LLM_BACKEND",  default="ollama")
 
 # --- Ollama (local, gratuit) ---
@@ -205,6 +209,25 @@ ANTHROPIC_MODEL   = config("ANTHROPIC_MODEL",   default="claude-3-5-haiku-202410
 GEMINI_API_KEY = config("GEMINI_API_KEY", default="")
 GEMINI_MODEL   = config("GEMINI_MODEL",   default="gemini-1.5-flash")
 
-# Délai max (secondes) pour les API cloud (OpenAI/Anthropic/Gemini), bien plus
-# rapides qu'un modèle local sur CPU.
+# --- Groq (API cloud format OpenAI, très rapide, free tier) ---
+# Clé gratuite : https://console.groq.com/keys
+GROQ_API_KEY = config("GROQ_API_KEY", default="")
+GROQ_MODEL   = config("GROQ_MODEL",   default="llama-3.3-70b-versatile")
+
+# --- Cerebras Cloud (API cloud format OpenAI, très rapide, free tier) ---
+# Clé gratuite : https://cloud.cerebras.ai/
+CEREBRAS_API_KEY = config("CEREBRAS_API_KEY", default="")
+CEREBRAS_MODEL   = config("CEREBRAS_MODEL",   default="llama-3.3-70b")
+
+# --- Mistral AI (API cloud format OpenAI, fournisseur européen, free tier) ---
+# Clé : https://console.mistral.ai/
+MISTRAL_API_KEY = config("MISTRAL_API_KEY", default="")
+MISTRAL_MODEL   = config("MISTRAL_MODEL",   default="mistral-small-latest")
+
+# --- OpenRouter (passerelle multi-modèles, format OpenAI) ---
+# Clé : https://openrouter.ai/keys  | modèle au format "editeur/modele" (suffixe ":free" possible)
+OPENROUTER_API_KEY = config("OPENROUTER_API_KEY", default="")
+OPENROUTER_MODEL   = config("OPENROUTER_MODEL",   default="meta-llama/llama-3.1-8b-instruct")
+
+# Délai max (secondes) pour les API cloud, bien plus rapides qu'un modèle local sur CPU.
 LLM_API_TIMEOUT = config("LLM_API_TIMEOUT", default=60, cast=int)

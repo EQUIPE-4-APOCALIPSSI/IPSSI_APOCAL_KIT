@@ -22,7 +22,7 @@ de LLM open source.
 | Backend | Django + DRF | Python 3.11+ |
 | Frontend | React + Vite + TypeScript | React 18 |
 | Base de données | PostgreSQL | 16 (Docker) |
-| LLM | Ollama (local, défaut) · Gemini · OpenAI · Claude · mock | Choix via `LLM_BACKEND` |
+| LLM | Ollama (local) · Gemini · Groq · Cerebras · Mistral · OpenRouter · OpenAI · Claude · mock | Choix via `LLM_BACKEND` |
 | Parsing PDF | `pypdf` | — |
 | Conteneurisation | Docker + Compose | — |
 | API docs | drf-spectacular | Swagger UI auto |
