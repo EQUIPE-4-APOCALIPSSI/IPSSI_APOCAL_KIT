@@ -42,7 +42,8 @@ Quatre fournisseurs sont disponibles, sélectionnés par `LLM_BACKEND` dans `.en
 |---|---|---|---|---|
 | `ollama` *(défaut)* | Modèle local (Llama, Phi…) | **Gratuit** | Restent sur le serveur (souveraineté) | Développement, démo, RGPD strict |
 | `mock` | Faux QCM instantanés | Gratuit | Aucune | Tests, dev de l'UI sans attendre |
-| `openai` | API OpenAI (GPT) | 💸 **Payant** | Envoyées hors UE | Future version premium |
+| `gemini` | API Google Gemini | **Free tier** puis payant | Envoyées hors UE | Tester une API cloud **sans carte bancaire** |
+| `openai` | API OpenAI (GPT) | 💸 **Payant** (crédit requis) | Envoyées hors UE | Future version premium |
 | `anthropic` | API Anthropic (Claude) | 💸 **Payant** | Envoyées hors UE | Future version premium |
 
 ```bash
@@ -56,7 +57,16 @@ LLM_BACKEND=ollama                       # gratuit, local (recommandé en dev)
 # LLM_BACKEND=anthropic                  # payant
 # ANTHROPIC_API_KEY=sk-ant-...
 # ANTHROPIC_MODEL=claude-3-5-haiku-20241022
+
+# LLM_BACKEND=gemini                     # free tier (clé gratuite, sans CB)
+# GEMINI_API_KEY=AIza...                 # https://aistudio.google.com/apikey
+# GEMINI_MODEL=gemini-1.5-flash
 ```
+
+> 💡 **Gemini = le meilleur moyen de tester une API cloud gratuitement.** Sa clé
+> s'obtient sans carte bancaire sur Google AI Studio et le free tier suffit
+> largement à générer des quiz en démo. OpenAI, lui, exige du crédit prépayé
+> (sinon erreur `insufficient_quota`).
 
 > ⚠️ **Garde-fou pédagogique.** En développement, **restez sur `ollama` (gratuit)**.
 > Les fournisseurs payants envoient le cours sur des serveurs hors UE (enjeu RGPD,

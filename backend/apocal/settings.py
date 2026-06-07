@@ -174,10 +174,11 @@ CORS_ALLOW_CREDENTIALS = True
 # ----------------------------------------------------------------------------
 # Intégration LLM (Ollama)
 # ----------------------------------------------------------------------------
-# Fournisseur de génération de quiz. 4 valeurs possibles :
+# Fournisseur de génération de quiz. 5 valeurs possibles :
 #   "ollama"    -> modèle LOCAL gratuit (défaut, recommandé en développement)
-#   "openai"    -> API OpenAI (PAYANT, future version premium)
-#   "anthropic" -> API Anthropic / Claude (PAYANT, future version premium)
+#   "gemini"    -> API Google Gemini (CLOUD, FREE TIER disponible)
+#   "openai"    -> API OpenAI (CLOUD, PAYANT, future version premium)
+#   "anthropic" -> API Anthropic / Claude (CLOUD, PAYANT, future version premium)
 #   "mock"      -> faux QCM instantanés (tests / dev sans LLM)
 LLM_BACKEND  = config("LLM_BACKEND",  default="ollama")
 
@@ -199,6 +200,11 @@ OPENAI_MODEL   = config("OPENAI_MODEL",   default="gpt-4o-mini")
 ANTHROPIC_API_KEY = config("ANTHROPIC_API_KEY", default="")
 ANTHROPIC_MODEL   = config("ANTHROPIC_MODEL",   default="claude-3-5-haiku-20241022")
 
-# Délai max (secondes) pour les API cloud (OpenAI/Anthropic), bien plus rapides
-# qu'un modèle local sur CPU.
+# --- Google Gemini (API cloud, FREE TIER disponible) ---
+# Clé gratuite : https://aistudio.google.com/apikey
+GEMINI_API_KEY = config("GEMINI_API_KEY", default="")
+GEMINI_MODEL   = config("GEMINI_MODEL",   default="gemini-1.5-flash")
+
+# Délai max (secondes) pour les API cloud (OpenAI/Anthropic/Gemini), bien plus
+# rapides qu'un modèle local sur CPU.
 LLM_API_TIMEOUT = config("LLM_API_TIMEOUT", default=60, cast=int)
