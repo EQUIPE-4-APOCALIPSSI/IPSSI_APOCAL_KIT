@@ -1,0 +1,2 @@
+Ceci est un test, l'interet est que Git enregistre bien le nouveau repertoire Cadrage, 
+dans lequel on mettra les fichiers et documents relatifs a la gestion du projet.
