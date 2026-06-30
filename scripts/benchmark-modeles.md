@@ -1,6 +1,6 @@
 # Benchmark méthodologique — latence et qualité des modèles LLM
 
-*Pour des raisons de coûts LLM, nous avons effectué des recherches sur des tableaux et comparaisons déjà existants.*
+*Ce fichier n'est actuellement pas un script benchmark reproductible. Pour des raisons de coûts LLM, nous avons effectué des recherches sur des tableaux et comparaisons déjà existants.*
 
 ## Objectif
 
