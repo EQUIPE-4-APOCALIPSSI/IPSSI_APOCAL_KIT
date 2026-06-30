@@ -22,6 +22,7 @@ from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
 from django.http import FileResponse
+from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -316,7 +317,7 @@ class ExportDataView(APIView):
         user = request.user
         profile = get_or_create_profile(user)
         quizzes = Quiz.objects.filter(user=user).prefetch_related("questions")
-        now = __import__("django.utils.timezone", fromlist=["timezone"]).timezone.now()
+        now = timezone.now()
 
         # --- 1. user.json ---
         user_data = {
