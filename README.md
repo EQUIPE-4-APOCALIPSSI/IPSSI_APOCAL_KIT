@@ -82,6 +82,14 @@ open http://localhost:8000/api/docs  # Swagger UI
 > 💡 Prérequis : Docker + Docker Compose, ≥ 8 Go RAM dispos pour Ollama,
 > ≥ 5 Go d'espace disque pour le modèle.
 
+> 🩺 **« Impossible de joindre le serveur » au login / signup ?** Le backend
+> Django met **~20 à 60 s** à être prêt au 1er lancement (le message
+> « Conteneurs lancés » s'affiche **avant**, et un `make seed` vert ne prouve
+> pas que l'API écoute). Lancez **`make doctor`** pour un diagnostic automatique
+> (conteneurs, santé du backend, ports réels), ou voir la section
+> *« Impossible de joindre le serveur »* de
+> [docs/06-troubleshooting.md](./docs/06-troubleshooting.md).
+
 ---
 
 ## 🟢 Lancer l'application en une commande
@@ -145,7 +153,7 @@ Le dossier [`docs/`](./docs) contient 11 fiches thématiques :
 | [03-auth.md](./docs/03-auth.md) | Auth par email, validation, reset, profil, où étendre |
 | [04-testing.md](./docs/04-testing.md) | pytest, vitest + tutorial test adversarial (préparation J3) |
 | [05-ci-cd.md](./docs/05-ci-cd.md) | GitHub Actions, Conventional Commits, hooks pre-commit |
-| [06-troubleshooting.md](./docs/06-troubleshooting.md) | Docker, ports en conflit, Ollama, CORS |
+| [06-troubleshooting.md](./docs/06-troubleshooting.md) | **« Impossible de joindre le serveur »**, Docker, ports, Ollama, CORS |
 | [07-bonnes-pratiques.md](./docs/07-bonnes-pratiques.md) | ADR, post-mortem, INVEST, MoSCoW + lien cours Agile |
 | [08-mvp2-idees.md](./docs/08-mvp2-idees.md) | Catalogue d'idées MVP2 + méthode de priorisation |
 | [09-admin.md](./docs/09-admin.md) | Interface d'admin : config LLM/app, utilisateurs, données |
@@ -159,6 +167,7 @@ Le dossier [`docs/`](./docs) contient 11 fiches thématiques :
 ```bash
 make help          # Liste toutes les cibles
 make dev           # Lance tous les services
+make doctor        # Diagnostique front <-> back ("Impossible de joindre le serveur")
 make down          # Arrête tous les services
 make logs          # Logs en temps réel
 make pull-model    # Télécharge Llama 3.1 8B (1 fois)
