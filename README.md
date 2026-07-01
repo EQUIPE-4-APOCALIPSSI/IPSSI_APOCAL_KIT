@@ -41,6 +41,8 @@ de LLM open source.
 - **MVP2 (démos)** : tableau de bord de progression, révision des erreurs, **mode sombre**
 - **Admin** : interface d'admin (config LLM/app depuis l'UI, gestion des utilisateurs)
 - **LLM** : 9 fournisseurs au choix · **Emails** : console (dev) / Brevo (réel)
+- **RGPD** : export ZIP de toutes les données personnelles (JSON + CSV) depuis le profil,
+  politique de rétention documentée — conforme Art. 15 (accès) et Art. 20 (portabilité)
 - **Légal** : 4 pages légales vierges à compléter
 
 ---
