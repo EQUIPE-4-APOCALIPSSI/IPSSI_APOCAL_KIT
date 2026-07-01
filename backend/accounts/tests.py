@@ -129,8 +129,9 @@ def test_export_data_zip_contains_expected_files(client, user):
     token = Token.objects.create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
     response = client.get("/api/accounts/me/export/")
+    content = b"".join(response.streaming_content)
 
-    zip_file = zipfile.ZipFile(io.BytesIO(response.content))
+    zip_file = zipfile.ZipFile(io.BytesIO(content))
     names = zip_file.namelist()
     assert "user.json" in names
     assert "quizzes.json" in names
@@ -151,6 +152,25 @@ def test_export_data_zip_contains_expected_files(client, user):
     assert "Test" in csv_content
 
 
+def test_export_data_creates_audit_trail(client, user):
+    from rest_framework.authtoken.models import Token
+
+    from accounts.models import DataRequest
+
+    token = Token.objects.create(user=user)
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code == 200
+
+    # Vérifier qu'une ligne d'audit a été créée
+    requests = DataRequest.objects.filter(user=user)
+    assert requests.count() == 1
+    sar = requests.first()
+    assert sar.status == "responded"
+    assert sar.responded_at is not None
+    assert len(sar.exported_file_hash) == 64  # SHA-256
+
+
 def test_export_data_does_not_leak_other_users_data(client, user):
     import io
     import json
@@ -167,7 +187,8 @@ def test_export_data_does_not_leak_other_users_data(client, user):
     token = Token.objects.create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
     response = client.get("/api/accounts/me/export/")
+    content = b"".join(response.streaming_content)
 
-    zip_file = zipfile.ZipFile(io.BytesIO(response.content))
+    zip_file = zipfile.ZipFile(io.BytesIO(content))
     quizzes_data = json.loads(zip_file.read("quizzes.json"))
     assert len(quizzes_data) == 0  # pas de fuite

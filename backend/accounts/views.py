@@ -13,6 +13,7 @@ Endpoints d'authentification (Lot 3 : email-identifiant + validation + reset).
 """
 
 import csv
+import hashlib
 import io
 import json
 import logging
@@ -414,9 +415,22 @@ class ExportDataView(APIView):
             zf.writestr("audit.json", json.dumps(audit_data, indent=2, ensure_ascii=False))
 
         zip_buffer.seek(0)
+        file_bytes = zip_buffer.getvalue()
+        file_hash = hashlib.sha256(file_bytes).hexdigest()
+
+        # Audit trail SAR (J3-bis) : enregistrer la demande
+        from .models import DataRequest
+
+        DataRequest.objects.create(
+            user=user,
+            status=DataRequest.Status.RESPONDED,
+            responded_at=now,
+            exported_file_hash=file_hash,
+        )
+
         filename = f"edututor-export-{user.id}-{now.strftime('%Y%m%d')}.zip"
         return FileResponse(
-            zip_buffer,
+            io.BytesIO(file_bytes),
             as_attachment=True,
             filename=filename,
             content_type="application/zip",
