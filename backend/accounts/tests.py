@@ -96,7 +96,7 @@ def test_logout_invalidates_token(client, user):
 # Export RGPD (US-15) — Droit d'accès Art. 15
 # ---------------------------------------------------------------------------
 def test_export_data_requires_auth(client):
-    response = client.get("/api/accounts/export-data/")
+    response = client.get("/api/accounts/me/export/")
     assert response.status_code in (401, 403)
 
 
@@ -105,7 +105,7 @@ def test_export_data_returns_zip(client, user):
 
     token = Token.objects.create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
-    response = client.get("/api/accounts/export-data/")
+    response = client.get("/api/accounts/me/export/")
     assert response.status_code == 200
     assert response["Content-Type"] == "application/zip"
     assert "edututor-export" in response["Content-Disposition"]
@@ -128,7 +128,7 @@ def test_export_data_zip_contains_expected_files(client, user):
 
     token = Token.objects.create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
-    response = client.get("/api/accounts/export-data/")
+    response = client.get("/api/accounts/me/export/")
 
     zip_file = zipfile.ZipFile(io.BytesIO(response.content))
     names = zip_file.namelist()
@@ -166,7 +166,7 @@ def test_export_data_does_not_leak_other_users_data(client, user):
 
     token = Token.objects.create(user=user)
     client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
-    response = client.get("/api/accounts/export-data/")
+    response = client.get("/api/accounts/me/export/")
 
     zip_file = zipfile.ZipFile(io.BytesIO(response.content))
     quizzes_data = json.loads(zip_file.read("quizzes.json"))

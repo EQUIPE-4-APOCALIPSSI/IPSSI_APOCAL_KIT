@@ -133,7 +133,7 @@ export async function deleteAccount(password: string): Promise<void> {
 
 /** Exporte toutes les données de l'utilisateur au format ZIP. */
 export async function exportData(): Promise<void> {
-  const response = await api.get('/accounts/export-data/', {
+  const response = await api.get('/accounts/me/export/', {
     responseType: 'blob',
   });
   // Déclencher le téléchargement côté navigateur
