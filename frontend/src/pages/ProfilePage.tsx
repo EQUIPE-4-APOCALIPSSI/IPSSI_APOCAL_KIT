@@ -17,7 +17,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { changePassword, deleteAccount, updateProfile } from '@/api/auth';
+import { changePassword, deleteAccount, exportData, updateProfile } from '@/api/auth';
 import { getApiErrorMessage } from '@/api/errors';
 
 export default function ProfilePage() {
@@ -39,6 +39,11 @@ export default function ProfilePage() {
   const [pwdMsg, setPwdMsg] = useState<string | null>(null);
   const [pwdErr, setPwdErr] = useState<string | null>(null);
   const [pwdLoading, setPwdLoading] = useState(false);
+
+  // --- Export RGPD ---
+  const [exportLoading, setExportLoading] = useState(false);
+  const [exportMsg, setExportMsg] = useState<string | null>(null);
+  const [exportErr, setExportErr] = useState<string | null>(null);
 
   // --- Zone 3 : suppression ---
   const [delPwd, setDelPwd] = useState('');
@@ -81,6 +86,20 @@ export default function ProfilePage() {
       setPwdErr(getApiErrorMessage(err, 'Changement de mot de passe impossible.'));
     } finally {
       setPwdLoading(false);
+    }
+  };
+
+  const handleExport = async () => {
+    setExportMsg(null);
+    setExportErr(null);
+    setExportLoading(true);
+    try {
+      await exportData();
+      setExportMsg('Export terminé. Vérifiez vos téléchargements.');
+    } catch (err) {
+      setExportErr(getApiErrorMessage(err, "Échec de l'export."));
+    } finally {
+      setExportLoading(false);
     }
   };
 
@@ -220,30 +239,42 @@ export default function ProfilePage() {
         </form>
       </section>
 
-      {/* Placeholders RGPD / signalement (à compléter pendant la semaine) */}
-      <section className="card bg-slate-50">
-        <h2 className="text-lg font-semibold text-slate-900 mb-2">Mes données</h2>
+      {/* Export RGPD (US-15) — Droit d'accès Art. 15 */}
+      <section className="card border-l-4 border-indigo-500">
+        <h2 className="text-lg font-semibold text-slate-900 mb-2">
+          🛡️ Mes données (RGPD)
+        </h2>
         <p className="text-sm text-slate-500 mb-4">
-          Fonctionnalités à construire pendant la semaine APOCAL'IPSSI.
+          Conformément à l'Article 15 du RGPD, vous pouvez exporter toutes vos
+          données personnelles : profil, quiz, réponses, historique.
         </p>
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            disabled
-            title="À implémenter (J3-bis) — droit à la portabilité RGPD"
-            className="btn-secondary opacity-60 cursor-not-allowed"
-          >
-            Exporter mes données (bientôt)
-          </button>
-          <button
-            type="button"
-            disabled
-            title="À implémenter (J4) — signalement de contenu"
-            className="btn-secondary opacity-60 cursor-not-allowed"
-          >
-            Signaler un contenu (bientôt)
-          </button>
-        </div>
+        {exportMsg && (
+          <div className="mb-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 text-sm text-emerald-900 rounded">
+            {exportMsg}
+          </div>
+        )}
+        {exportErr && (
+          <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
+            {exportErr}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={handleExport}
+          disabled={exportLoading}
+          className="btn-primary inline-flex items-center gap-2"
+        >
+          {exportLoading ? (
+            <>Préparation de l'archive…</>
+          ) : (
+            <>
+              📦 Exporter mes données (ZIP)
+            </>
+          )}
+        </button>
+        <p className="text-xs text-slate-400 mt-2">
+          L'archive contient vos informations personnelles, quiz et réponses au format JSON + CSV.
+        </p>
       </section>
 
       {/* Zone 3 : danger */}

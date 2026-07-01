@@ -90,3 +90,105 @@ def test_logout_invalidates_token(client, user):
     assert response.status_code == 204
     # Le token n'existe plus
     assert not Token.objects.filter(key=token.key).exists()
+
+
+# ---------------------------------------------------------------------------
+# Export RGPD (US-15) — Droit d'accès Art. 15
+# ---------------------------------------------------------------------------
+def test_export_data_requires_auth(client):
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code in (401, 403)
+
+
+def test_export_data_returns_zip(client, user):
+    from rest_framework.authtoken.models import Token
+
+    token = Token.objects.create(user=user)
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code == 200
+    assert response["Content-Type"] == "application/zip"
+    assert "edututor-export" in response["Content-Disposition"]
+
+
+def test_export_data_zip_contains_expected_files(client, user):
+    import io
+    import json
+    import zipfile
+
+    from rest_framework.authtoken.models import Token
+
+    from quizzes.models import Question, Quiz
+
+    quiz = Quiz.objects.create(user=user, title="Test", source_text="Cours de test")
+    for i in range(1, 11):
+        Question.objects.create(
+            quiz=quiz, index=i, prompt=f"Q{i}?", options=["A", "B", "C", "D"], correct_index=0
+        )
+
+    token = Token.objects.create(user=user)
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+    response = client.get("/api/accounts/me/export/")
+    content = b"".join(response.streaming_content)
+
+    zip_file = zipfile.ZipFile(io.BytesIO(content))
+    names = zip_file.namelist()
+    assert "user.json" in names
+    assert "quizzes.json" in names
+    assert "reponses.csv" in names
+    assert "audit.json" in names
+
+    quizzes_data = json.loads(zip_file.read("quizzes.json"))
+    assert len(quizzes_data) == 1
+    assert quizzes_data[0]["title"] == "Test"
+    assert len(quizzes_data[0]["questions"]) == 10
+
+    audit = json.loads(zip_file.read("audit.json"))
+    assert audit["total_quizzes"] == 1
+    assert audit["user_email"] == user.email
+
+    csv_content = zip_file.read("reponses.csv").decode()
+    assert "quiz_id,quiz_title" in csv_content
+    assert "Test" in csv_content
+
+
+def test_export_data_creates_audit_trail(client, user):
+    from rest_framework.authtoken.models import Token
+
+    from accounts.models import DataRequest
+
+    token = Token.objects.create(user=user)
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+    response = client.get("/api/accounts/me/export/")
+    assert response.status_code == 200
+
+    # Vérifier qu'une ligne d'audit a été créée
+    requests = DataRequest.objects.filter(user=user)
+    assert requests.count() == 1
+    sar = requests.first()
+    assert sar.status == "responded"
+    assert sar.responded_at is not None
+    assert len(sar.exported_file_hash) == 64  # SHA-256
+
+
+def test_export_data_does_not_leak_other_users_data(client, user):
+    import io
+    import json
+    import zipfile
+
+    from django.contrib.auth.models import User
+    from rest_framework.authtoken.models import Token
+
+    from quizzes.models import Quiz
+
+    other = User.objects.create_user(username="bob", email="bob@test.com")
+    Quiz.objects.create(user=other, title="Quiz secret", source_text="Confidentiel")
+
+    token = Token.objects.create(user=user)
+    client.credentials(HTTP_AUTHORIZATION=f"Token {token.key}")
+    response = client.get("/api/accounts/me/export/")
+    content = b"".join(response.streaming_content)
+
+    zip_file = zipfile.ZipFile(io.BytesIO(content))
+    quizzes_data = json.loads(zip_file.read("quizzes.json"))
+    assert len(quizzes_data) == 0  # pas de fuite
