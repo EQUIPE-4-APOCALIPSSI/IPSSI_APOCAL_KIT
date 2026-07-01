@@ -1,4 +1,4 @@
-# Sprint Backlog mis à jour — perturbation J1
+# Sprint Backlog mis à jour — perturbation J2
 
 ## Objectif
 

@@ -126,3 +126,29 @@ export async function deleteAccount(password: string): Promise<void> {
   await api.delete('/accounts/profile/', { data: { password } });
   clearToken();
 }
+
+// ---------------------------------------------------------------------------
+// Export RGPD (US-15) — Droit d'accès Art. 15
+// ---------------------------------------------------------------------------
+
+/** Exporte toutes les données de l'utilisateur au format ZIP. */
+export async function exportData(): Promise<void> {
+  const response = await api.get('/accounts/me/export/', {
+    responseType: 'blob',
+  });
+  // Déclencher le téléchargement côté navigateur
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = getExportFilename(response);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+
+function getExportFilename(response: { headers?: Record<string, string> }): string {
+  const disposition = response.headers?.['content-disposition'] ?? '';
+  const match = disposition.match(/filename="?(.+?)"?$/);
+  return match?.[1] ?? 'edututor-export.zip';
+}

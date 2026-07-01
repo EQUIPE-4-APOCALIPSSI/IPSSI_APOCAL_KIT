@@ -4,6 +4,67 @@ Les problèmes les plus fréquents et leurs solutions.
 
 ---
 
+## 🔌 « Impossible de joindre le serveur » (au login / signup)
+
+> *« Impossible de joindre le serveur. Vérifiez que le backend est démarré et que
+> la configuration CORS autorise l'adresse du frontend. »*
+
+Ce message signifie que le navigateur **n'a reçu AUCUNE réponse** du backend.
+C'est un problème de **connexion réseau**, et le plus souvent **pas** un vrai
+blocage CORS : le Kit autorise déjà `localhost:3000` et `127.0.0.1:3000`. Si
+c'était une vraie erreur applicative, vous verriez un **code HTTP** (401, 400…),
+pas ce message.
+
+> ⚠️ **Le piège classique** : `make seed` qui réussit (vert) **ne prouve pas** que
+> l'API écoute. `seed` passe par `docker compose exec` (un process séparé) et
+> fonctionne **même si `runserver` n'a pas démarré**. Donc *seed vert + login KO*
+> = le backend tourne mais le port 8000 n'est pas joignable depuis le navigateur.
+
+### Diagnostic automatique
+
+```bash
+make doctor
+```
+
+Affiche l'état des conteneurs, les **ports réellement publiés**, la santé du
+backend (`/health/`) et les dernières lignes de log. **Cherchez la ligne**
+`Starting development server at http://0.0.0.0:8000/` : si elle manque, le
+backend n'est pas (encore) prêt, ou il a planté.
+
+### Le test décisif (manuel, 30 s)
+
+Ouvrir **directement** dans le navigateur : <http://localhost:8000/api/docs/>
+
+- ✅ **Swagger s'affiche** → le backend est joignable. Le souci vient de l'URL du
+  **frontend** : ouvrez l'app via **`http://localhost:3000`** (pas une IP LAN
+  type `192.168.x.x`, qui n'est pas dans la whitelist CORS). DevTools (F12) →
+  onglet **Réseau** → rejouez « Se connecter » → si la requête `accounts/login/`
+  affiche « CORS error », c'est confirmé.
+- ❌ **Page injoignable** → le backend ne répond pas → checklist ci-dessous.
+
+### Checklist (surtout Windows + Docker Desktop)
+
+1. **Tenté trop tôt.** Au 1er lancement, `migrate` prend 20 à 60 s ; le banner
+   « Conteneurs lancés » s'affiche avant. Attendre la ligne « Starting
+   development server » (`make logs` ou `make doctor`), puis **recharger** la page.
+2. **Conteneur backend KO.** `docker compose ps` : la ligne `backend` doit être
+   **Up** (pas *Restarting* / *Exited*). Sinon, lire l'erreur :
+   `docker compose logs backend --tail=60`.
+3. **`localhost` vs `127.0.0.1` (IPv6).** Windows résout parfois `localhost` en
+   IPv6 `[::1]` alors que Docker publie en IPv4. Dans `.env`, mettre
+   `VITE_API_BASE_URL=http://127.0.0.1:8000/api`, refaire `make down && make dev`,
+   et ouvrir l'app sur `http://127.0.0.1:3000`. (Le CORS autorise déjà `127.0.0.1`.)
+4. **Port 8000 occupé.** `netstat -ano | findstr :8000` (Windows) /
+   `lsof -i :8000` (macOS/Linux). Un autre service (PHP local, autre projet) peut
+   intercepter le port.
+5. **Pare-feu / antivirus.** Certains AV bloquent le proxy de ports de Docker
+   Desktop → autoriser Docker Desktop, ou tester en le désactivant brièvement.
+6. **Vite lit `VITE_*` au démarrage.** Après toute modif d'une variable `VITE_`
+   dans `.env`, refaire `make down && make dev` (sinon l'ancienne valeur reste
+   figée dans le bundle servi).
+
+---
+
 ## 🐳 Docker
 
 ### `docker compose up` échoue avec "port already in use"
@@ -153,17 +214,28 @@ docker compose exec backend python manage.py seed
 
 ### "Access to XMLHttpRequest blocked by CORS policy"
 
-Le backend a une whitelist explicite dans `settings.py` :
+Le backend calcule sa whitelist **dynamiquement** dans `settings.py`. Par défaut
+il autorise déjà :
 
-```python
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+```text
+http://localhost:3000      http://127.0.0.1:3000
+http://localhost:<FRONTEND_HOST_PORT>   http://127.0.0.1:<FRONTEND_HOST_PORT>
 ```
 
-Si vous accédez au frontend depuis une autre URL (ex. votre IP locale
-`192.168.1.42:3000`) : ajouter cette URL à la liste.
+Donc rien à changer si vous gardez le port 3000 **ou** si vous changez
+`FRONTEND_HOST_PORT` dans `.env` (le port est repris automatiquement).
+
+Si vous accédez au frontend depuis une **autre** URL (ex. votre IP locale
+`192.168.1.42:3000`), surchargez la liste complète via `.env` (séparée par des
+virgules), puis `make down && make dev` :
+
+```bash
+# .env
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://192.168.1.42:3000
+```
+
+> 💡 Rappel : « **Impossible de joindre le serveur** » (aucune réponse) n'est en
+> général **pas** un vrai problème CORS. Voir la section dédiée en haut de page.
 
 ---
 
