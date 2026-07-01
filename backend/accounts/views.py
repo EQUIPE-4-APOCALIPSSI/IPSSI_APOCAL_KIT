@@ -9,7 +9,7 @@ Endpoints d'authentification (Lot 3 : email-identifiant + validation + reset).
     POST /api/accounts/resend-verification/      — renvoyer l'email de validation
     POST /api/accounts/password-reset/           — demander un reset (envoie un email)
     POST /api/accounts/password-reset/confirm/   — définir le nouveau mot de passe
-    GET  /api/accounts/export-data/              — exporter ses données (RGPD Art. 15)
+    GET  /api/accounts/me/export/                — exporter ses données (RGPD Art. 15)
 """
 
 import csv
