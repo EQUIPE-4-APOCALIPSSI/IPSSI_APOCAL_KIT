@@ -139,7 +139,9 @@ export default function ProfilePage() {
         <form onSubmit={handleInfo} className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.firstName')}</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {t('profile.firstName')}
+              </label>
               <input
                 type="text"
                 value={firstName}
@@ -148,7 +150,9 @@ export default function ProfilePage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.lastName')}</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {t('profile.lastName')}
+              </label>
               <input
                 type="text"
                 value={lastName}
@@ -170,9 +174,7 @@ export default function ProfilePage() {
               onChange={(e) => setEmail(e.target.value)}
               className="input"
             />
-            <p className="text-xs text-slate-500 mt-1">
-              {t('profile.emailChangeHint')}
-            </p>
+            <p className="text-xs text-slate-500 mt-1">{t('profile.emailChangeHint')}</p>
           </div>
           <button type="submit" disabled={infoLoading} className="btn-primary">
             {infoLoading ? t('profile.saving') : t('profile.save')}
@@ -223,7 +225,9 @@ export default function ProfilePage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">{t('profile.passwordConfirm')}</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {t('profile.passwordConfirm')}
+              </label>
               <input
                 type="password"
                 required
@@ -274,9 +278,7 @@ export default function ProfilePage() {
       {/* Zone 3 : danger */}
       <section className="card border-2 border-rose-200">
         <h2 className="text-lg font-semibold text-rose-700 mb-2">{t('profile.dangerTitle')}</h2>
-        <p className="text-sm text-slate-600 mb-4">
-          {t('profile.dangerDesc')}
-        </p>
+        <p className="text-sm text-slate-600 mb-4">{t('profile.dangerDesc')}</p>
         {delErr && (
           <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
             {delErr}

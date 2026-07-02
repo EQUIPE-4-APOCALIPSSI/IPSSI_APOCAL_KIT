@@ -23,7 +23,7 @@ export default function HistoryPage() {
     <div className="space-y-4">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-                  <h1 className="text-3xl font-bold text-slate-900">{t('history.title')}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{t('history.title')}</h1>
           <p className="text-slate-500 text-sm">
             {quizzes.length === 0
               ? "Aucun quiz pour l'instant — créez votre premier !"

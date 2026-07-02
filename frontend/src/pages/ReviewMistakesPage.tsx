@@ -56,7 +56,7 @@ export default function ReviewMistakesPage() {
   return (
     <div className="space-y-6">
       <div>
-                <h1 className="text-3xl font-bold text-slate-900">{t('review.title')}</h1>
+        <h1 className="text-3xl font-bold text-slate-900">{t('review.title')}</h1>
         <p className="text-slate-500 text-sm">
           {mistakes.length === 0
             ? t('review.empty')
@@ -67,9 +67,7 @@ export default function ReviewMistakesPage() {
       {mistakes.length === 0 ? (
         <div className="card text-center py-12">
           <div className="text-5xl mb-4">🎯</div>
-                    <p className="text-slate-600 mb-4">
-            {t('review.emptyDesc')}
-          </p>
+          <p className="text-slate-600 mb-4">{t('review.emptyDesc')}</p>
           <Link to="/upload" className="btn-primary">
             {t('review.createQuiz')}
           </Link>

@@ -34,10 +34,8 @@ export default function UploadPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-              <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('upload.title')}</h1>
-      <p className="text-slate-600 mb-6">
-        {t('upload.subtitle')}
-      </p>
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('upload.title')}</h1>
+      <p className="text-slate-600 mb-6">{t('upload.subtitle')}</p>
 
       {error && (
         <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
@@ -47,7 +45,9 @@ export default function UploadPage() {
 
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-1">{t('upload.courseTitle')}</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            {t('upload.courseTitle')}
+          </label>
           <input
             type="text"
             required
@@ -69,7 +69,7 @@ export default function UploadPage() {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-                              {t('upload.textMode')}
+              {t('upload.textMode')}
             </button>
             <button
               type="button"
@@ -80,7 +80,7 @@ export default function UploadPage() {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-                              {t('upload.pdfMode')}
+              {t('upload.pdfMode')}
             </button>
           </div>
 
@@ -91,7 +91,7 @@ export default function UploadPage() {
               minLength={200}
               value={sourceText}
               onChange={(e) => setSourceText(e.target.value)}
-                            placeholder={t('upload.placeholderText')}
+              placeholder={t('upload.placeholderText')}
               className="input"
             />
           ) : (
@@ -105,7 +105,7 @@ export default function UploadPage() {
           )}
           {mode === 'text' && (
             <p className="text-xs text-slate-500 mt-1">
-                            {sourceText.length} / 200 {t('upload.charsMin')}
+              {sourceText.length} / 200 {t('upload.charsMin')}
             </p>
           )}
         </div>
@@ -114,9 +114,7 @@ export default function UploadPage() {
           {loading ? t('upload.loading') : t('upload.submit')}
         </button>
 
-        <p className="text-xs text-slate-500 text-center">
-                    {t('upload.desc')}
-        </p>
+        <p className="text-xs text-slate-500 text-center">{t('upload.desc')}</p>
       </form>
     </div>
   );

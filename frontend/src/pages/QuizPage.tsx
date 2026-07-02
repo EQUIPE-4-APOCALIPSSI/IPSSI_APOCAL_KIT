@@ -40,7 +40,7 @@ export default function QuizPage() {
       setResult(res);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
-setError(t('quiz.submitError'));
+      setError(t('quiz.submitError'));
     } finally {
       setSubmitting(false);
     }

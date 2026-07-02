@@ -37,7 +37,7 @@ export default function VerifyEmailBanner() {
     <div className="bg-amber-50 border-b border-amber-200">
       <div className="max-w-6xl mx-auto px-4 py-2 text-sm text-amber-900 flex flex-wrap items-center justify-between gap-2">
         <span>
-                {t('verifyBanner.text')}
+          {t('verifyBanner.text')}
           {message ? ` — ${message}` : '.'}
         </span>
         <button

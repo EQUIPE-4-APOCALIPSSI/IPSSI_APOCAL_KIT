@@ -54,7 +54,7 @@ export default function ResetPasswordPage() {
 
         {linkInvalid ? (
           <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
-                        {t('reset.invalidLink')}{' '}
+            {t('reset.invalidLink')}{' '}
             <Link to="/forgot-password" className="text-indigo-600 hover:underline">
               « mot de passe oublié »
             </Link>
@@ -66,9 +66,7 @@ export default function ResetPasswordPage() {
           </div>
         ) : (
           <>
-            <p className="text-sm text-slate-500 mb-6">
-                            {t('reset.desc')}
-            </p>
+            <p className="text-sm text-slate-500 mb-6">{t('reset.desc')}</p>
 
             {error && (
               <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
@@ -109,7 +107,7 @@ export default function ResetPasswordPage() {
               </div>
 
               <button type="submit" disabled={loading} className="btn-primary w-full">
-                              {loading ? t('reset.loading') : t('reset.submit')}
+                {loading ? t('reset.loading') : t('reset.submit')}
               </button>
             </form>
           </>

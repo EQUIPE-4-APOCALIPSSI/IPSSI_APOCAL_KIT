@@ -37,9 +37,7 @@ export default function ForgotPasswordPage() {
     <div className="max-w-md mx-auto">
       <div className="card">
         <h1 className="text-2xl font-bold text-slate-900 mb-2">{t('forgot.title')}</h1>
-        <p className="text-sm text-slate-500 mb-6">
-          {t('forgot.desc')}
-        </p>
+        <p className="text-sm text-slate-500 mb-6">{t('forgot.desc')}</p>
 
         {message ? (
           <div className="mb-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 text-sm text-emerald-900 rounded">
@@ -60,7 +58,9 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">{t('forgot.email')}</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  {t('forgot.email')}
+                </label>
                 <input
                   type="email"
                   required

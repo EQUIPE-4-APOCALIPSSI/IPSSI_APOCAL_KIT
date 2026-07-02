@@ -52,7 +52,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-                    <h1 className="text-3xl font-bold text-slate-900">{t('dashboard.title')}</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{t('dashboard.title')}</h1>
           <p className="text-slate-500 text-sm">{t('dashboard.subtitle')}</p>
         </div>
         <Link to="/upload" className="btn-primary">
@@ -63,9 +63,7 @@ export default function DashboardPage() {
       {!hasData ? (
         <div className="card text-center py-12">
           <div className="text-5xl mb-4">📊</div>
-                    <p className="text-slate-600 mb-4">
-            {t('dashboard.empty')}
-          </p>
+          <p className="text-slate-600 mb-4">{t('dashboard.empty')}</p>
           <Link to="/upload" className="btn-primary">
             {t('dashboard.createQuiz')}
           </Link>
@@ -75,7 +73,7 @@ export default function DashboardPage() {
           {/* KPIs */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <KpiCard
-                            label={t('dashboard.kpiTaken')}
+              label={t('dashboard.kpiTaken')}
               value={String(stats.quizzes_taken)}
               hint={`${stats.total_quizzes} ${t('dashboard.kpiTakenHint')}`}
             />
@@ -96,7 +94,9 @@ export default function DashboardPage() {
 
           {/* Graphique de progression (barres maison) */}
           <div className="card">
-                      <h2 className="text-lg font-semibold text-slate-900 mb-4">{t('dashboard.chartTitle')}</h2>
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              {t('dashboard.chartTitle')}
+            </h2>
             <div className="flex items-end gap-2 h-48 border-b border-l border-slate-200 pl-2 pb-px">
               {stats.history.map((p) => (
                 <div

@@ -49,7 +49,9 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">{t('login.email')}</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              {t('login.email')}
+            </label>
             <input
               type="email"
               required
@@ -63,7 +65,9 @@ export default function LoginPage() {
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-medium text-slate-700">{t('login.password')}</label>
+              <label className="block text-sm font-medium text-slate-700">
+                {t('login.password')}
+              </label>
               <Link to="/forgot-password" className="text-xs text-indigo-600 hover:underline">
                 {t('login.forgot')}
               </Link>

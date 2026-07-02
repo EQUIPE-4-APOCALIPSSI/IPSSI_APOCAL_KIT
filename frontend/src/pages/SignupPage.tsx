@@ -47,9 +47,7 @@ export default function SignupPage() {
         <div className="card text-center">
           <div className="text-4xl mb-3">🔒</div>
           <h1 className="text-2xl font-bold text-slate-900 mb-2">{t('signup.closed')}</h1>
-          <p className="text-sm text-slate-500 mb-4">
-            {t('signup.closedDesc')}
-          </p>
+          <p className="text-sm text-slate-500 mb-4">{t('signup.closedDesc')}</p>
           <Link to="/login" className="text-indigo-600 hover:underline">
             {t('signup.alreadyAccount')}
           </Link>
@@ -77,7 +75,9 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">{t('signup.email')}</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              {t('signup.email')}
+            </label>
             <input
               type="email"
               required
@@ -92,7 +92,8 @@ export default function SignupPage() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                {t('signup.firstName')} <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
+                {t('signup.firstName')}{' '}
+                <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
               </label>
               <input
                 type="text"
@@ -104,7 +105,8 @@ export default function SignupPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                {t('signup.lastName')} <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
+                {t('signup.lastName')}{' '}
+                <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
               </label>
               <input
                 type="text"
