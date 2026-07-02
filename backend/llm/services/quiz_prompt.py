@@ -23,25 +23,51 @@ logger = logging.getLogger(__name__)
 # on garde une limite commune pour des coûts/latences maîtrisés.
 MAX_SOURCE_CHARS = 8000
 
-SYSTEM_PROMPT = """Tu es un assistant pédagogique francophone spécialisé en
-génération de QCM. À partir du cours fourni, tu génères exactement 10 questions
-à choix multiples pour aider un étudiant à réviser.
+# Langues supportées pour la génération de quiz (i18n — J4)
+SUPPORTED_LANGUAGES = {
+    "fr": "français",
+    "en": "anglais",
+    "es": "espagnol",
+    "de": "allemand",
+    "it": "italien",
+}
+
+DEFAULT_LANGUAGE = "fr"
+
+SYSTEM_PROMPT_TPL = """Tu es un assistant pédagogique spécialisé en
+génération de QCM, qui répond en {langue}. À partir du cours fourni, tu
+génères exactement 10 questions à choix multiples dans la langue du cours
+({langue}) pour aider un étudiant à réviser.
 
 Règles ABSOLUES :
 - Exactement 10 questions.
 - Chaque question a EXACTEMENT 4 options.
 - Une seule bonne réponse par question, indiquée par "correct_index" (0 à 3).
+- Les questions et options doivent être rédigées en {langue}.
 - Pas de markdown, pas de balises HTML, pas d'explications hors JSON.
 - Sortie = JSON STRICT et UNIQUEMENT JSON.
 
 Format de sortie :
-{
+{{
   "questions": [
-    {"prompt": "...", "options": ["...","...","...","..."], "correct_index": 0},
+    {{"prompt": "...", "options": ["...","...","...","..."], "correct_index": 0}},
     ... (10 entrées)
   ]
-}
+}}
 """
+
+
+def get_system_prompt(language: str = DEFAULT_LANGUAGE) -> str:
+    """Renvoie le prompt système dans la langue demandée.
+
+    Args:
+        language: Code langue (fr, en, es, de, it). Défaut: fr.
+
+    Returns:
+        Le prompt système formaté avec la langue appropriée.
+    """
+    langue = SUPPORTED_LANGUAGES.get(language, SUPPORTED_LANGUAGES[DEFAULT_LANGUAGE])
+    return SYSTEM_PROMPT_TPL.format(langue=langue)
 
 
 def build_user_prompt(source_text: str, title: str) -> str:
@@ -52,10 +78,11 @@ def build_user_prompt(source_text: str, title: str) -> str:
     )
 
 
-def build_full_prompt(source_text: str, title: str) -> str:
+def build_full_prompt(source_text: str, title: str, language: str = DEFAULT_LANGUAGE) -> str:
     """Prompt complet (system + user) pour les API « completion » simples
     comme Ollama /api/generate qui n'ont pas de séparation system/user."""
-    return f"{SYSTEM_PROMPT}\n\n{build_user_prompt(source_text, title)}"
+    system = get_system_prompt(language)
+    return f"{system}\n\n{build_user_prompt(source_text, title)}"
 
 
 def parse_and_validate_quiz(raw: str) -> list[dict]:

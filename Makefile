@@ -4,7 +4,7 @@
 # Raccourcis pour les opérations courantes. Tapez `make help` pour la liste.
 # ============================================================================
 
-.PHONY: help dev down logs build test lint ci pull-model seed reset-db backend-shell frontend-shell
+.PHONY: help dev doctor down logs build test lint ci pull-model seed reset-db backend-shell frontend-shell
 
 help:  ## Affiche cette aide
 	@echo "IPSSI_APOCAL_KIT — Cibles Makefile disponibles :"
@@ -17,13 +17,39 @@ help:  ## Affiche cette aide
 dev:  ## Lance tous les services en arrière-plan (postgres, ollama, backend, frontend)
 	docker compose up -d
 	@echo ""
-	@echo "✅ Services démarrés."
-	@echo "   Frontend  : http://localhost:3000"
+	@echo "[OK] Conteneurs lances."
+	@echo "     Le backend Django met ~20 a 60 s a etre pret au 1er lancement"
+	@echo "     (ce message s'affiche AVANT que Django ecoute sur le port 8000)."
+	@echo ""
+	@echo "   Frontend  : http://localhost:3000   (port change via FRONTEND_HOST_PORT -> 'make doctor')"
 	@echo "   API       : http://localhost:8000/api"
 	@echo "   API docs  : http://localhost:8000/api/docs"
 	@echo "   Ollama    : http://localhost:11434"
 	@echo ""
-	@echo "ℹ️  Premier lancement ? Pensez à : make pull-model"
+	@echo "[!] Avant de vous connecter, attendez la ligne 'Starting development server' :"
+	@echo "       make doctor    # etat des conteneurs + sante backend + ports reels"
+	@echo "    Erreur 'Impossible de joindre le serveur' ? -> docs/06-troubleshooting.md"
+	@echo ""
+	@echo "[i] Premier lancement ? Pensez a : make pull-model"
+
+doctor:  ## Diagnostique la connexion front <-> back (conteneurs, sante backend, ports reels)
+	@echo "== 1. Etat des conteneurs (la ligne 'backend' doit etre 'Up', pas 'Restarting'/'Exited') =="
+	docker compose ps
+	@echo ""
+	@echo "== 2. Ports reellement publies sur l'hote =="
+	@echo "   frontend (port conteneur 3000) ->"
+	-docker compose port frontend 3000
+	@echo "   backend  (port conteneur 8000) ->"
+	-docker compose port backend 8000
+	@echo ""
+	@echo "== 3. Le backend repond-il ? (attendu : une reponse JSON 'status: ok') =="
+	-curl -s http://127.0.0.1:8000/health/
+	@echo ""
+	@echo ""
+	@echo "== 4. Logs backend : cherchez 'Starting development server at http://0.0.0.0:8000/' =="
+	docker compose logs backend --tail=20
+	@echo ""
+	@echo "Aide detaillee : docs/06-troubleshooting.md (section 'Impossible de joindre le serveur')"
 
 down:  ## Arrête tous les services (conserve les volumes)
 	docker compose down

@@ -1,5 +1,7 @@
 # Benchmark méthodologique — latence et qualité des modèles LLM
 
+*Pour des raisons de coûts LLM, nous avons effectué des recherches sur des tableaux et comparaisons déjà existants.*
+
 ## Objectif
 
 Comparer le modèle actuel à deux alternatives sur la base de la latence, de la qualité perçue et des besoins matériels, afin d’appuyer une décision de sélection de modèle avec une base de comparaison cohérente.
