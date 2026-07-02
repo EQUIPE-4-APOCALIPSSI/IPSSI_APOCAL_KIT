@@ -6,6 +6,7 @@
  * vert). Objectif pédagogique pour l'apprenant : apprendre de ses erreurs.
  */
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { getMistakes, type Mistake } from '@/api/quizzes';
 import { getApiErrorMessage } from '@/api/errors';
@@ -37,6 +38,7 @@ function OptionRow({
 }
 
 export default function ReviewMistakesPage() {
+  const { t } = useTranslation();
   const [mistakes, setMistakes] = useState<Mistake[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,28 +50,28 @@ export default function ReviewMistakesPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-slate-500">Chargement…</p>;
+  if (loading) return <p className="text-slate-500">{t('common.loading')}</p>;
   if (error) return <p className="text-rose-600">{error}</p>;
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900">Réviser mes erreurs</h1>
+                <h1 className="text-3xl font-bold text-slate-900">{t('review.title')}</h1>
         <p className="text-slate-500 text-sm">
           {mistakes.length === 0
-            ? 'Aucune erreur enregistrée — bravo !'
-            : `${mistakes.length} question${mistakes.length > 1 ? 's' : ''} à revoir.`}
+            ? t('review.empty')
+            : `${mistakes.length} ${mistakes.length > 1 ? 'questions' : 'question'} ${t('review.title')}`}
         </p>
       </div>
 
       {mistakes.length === 0 ? (
         <div className="card text-center py-12">
           <div className="text-5xl mb-4">🎯</div>
-          <p className="text-slate-600 mb-4">
-            Vous n'avez aucune erreur à réviser. Passez un quiz pour vous entraîner !
+                    <p className="text-slate-600 mb-4">
+            {t('review.emptyDesc')}
           </p>
           <Link to="/upload" className="btn-primary">
-            Créer un quiz
+            {t('review.createQuiz')}
           </Link>
         </div>
       ) : (
