@@ -1,0 +1,38 @@
+{
+  "app": {
+    "name": "EduTutor IA"
+  },
+  "nav": {
+    "newQuiz": "New quiz",
+    "dashboard": "Dashboard",
+    "review": "Review",
+    "history": "History",
+    "admin": "Admin",
+    "profile": "My profile",
+    "login": "Login",
+    "signup": "Sign up",
+    "logout": "Logout"
+  },
+  "home": {
+    "title": "Study better, with AI.",
+    "subtitle": "Upload your course, EduTutor generates 10 MCQ questions, corrects them and identifies your gaps. All on your machine, open source.",
+    "cta": "Start for free",
+    "login": "Sign in"
+  },
+  "upload": {
+    "title": "Create a new quiz",
+    "subtitle": "Upload a PDF or paste text. EduTutor IA generates 10 MCQ questions.",
+    "textMode": "📝 Pasted text",
+    "pdfMode": "📄 PDF"
+  },
+  "common": {
+    "loading": "Loading…",
+    "error": "Error",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "lang": {
+    "fr": "Français",
+    "en": "English"
+  }
+}

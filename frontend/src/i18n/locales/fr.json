@@ -1,0 +1,38 @@
+{
+  "app": {
+    "name": "EduTutor IA"
+  },
+  "nav": {
+    "newQuiz": "Nouveau quiz",
+    "dashboard": "Tableau de bord",
+    "review": "Révision",
+    "history": "Historique",
+    "admin": "Admin",
+    "profile": "Mon profil",
+    "login": "Connexion",
+    "signup": "S'inscrire",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "title": "Révise mieux, grâce à l'IA.",
+    "subtitle": "Upload ton cours, EduTutor te génère 10 questions QCM, te corrige et identifie tes lacunes. Le tout sur ta machine, en open source.",
+    "cta": "Commencer gratuitement",
+    "login": "Se connecter"
+  },
+  "upload": {
+    "title": "Créer un nouveau quiz",
+    "subtitle": "Uploade un PDF ou colle un texte. EduTutor IA génère 10 questions QCM.",
+    "textMode": "📝 Texte collé",
+    "pdfMode": "📄 PDF"
+  },
+  "common": {
+    "loading": "Chargement…",
+    "error": "Erreur",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "lang": {
+    "fr": "Français",
+    "en": "English"
+  }
+}
