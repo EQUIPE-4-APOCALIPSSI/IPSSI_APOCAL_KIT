@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { listQuizzes, type QuizSummary } from '@/api/quizzes';
 
 export default function HistoryPage() {
+  const { t } = useTranslation();
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,14 +16,14 @@ export default function HistoryPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-slate-500">Chargement…</p>;
+  if (loading) return <p className="text-slate-500">{t('common.loading')}</p>;
   if (error) return <p className="text-rose-600">{error}</p>;
 
   return (
     <div className="space-y-4">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Mon historique</h1>
+          <h1 className="text-3xl font-bold text-slate-900">{t('history.title')}</h1>
           <p className="text-slate-500 text-sm">
             {quizzes.length === 0
               ? "Aucun quiz pour l'instant — créez votre premier !"
@@ -68,7 +70,7 @@ export default function HistoryPage() {
                 )}
                 {q.score === null && (
                   <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-xs font-mono">
-                    pas encore passé
+                    {t('history.notPassed')}
                   </span>
                 )}
               </div>

@@ -140,7 +140,7 @@ export async function exportData(): Promise<void> {
   const url = window.URL.createObjectURL(new Blob([response.data]));
   const link = document.createElement('a');
   link.href = url;
-  link.download = getExportFilename(response);
+  link.download = getExportFilename(response as { headers?: Record<string, string> });
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

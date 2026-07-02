@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router-dom';
 import { getQuiz, submitAnswers, type Quiz, type AnswerResult } from '@/api/quizzes';
 
 export default function QuizPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const quizId = Number(id);
 
@@ -17,9 +19,9 @@ export default function QuizPage() {
     setLoading(true);
     getQuiz(quizId)
       .then(setQuiz)
-      .catch(() => setError('Impossible de charger ce quiz.'))
+      .catch(() => setError(t('quiz.loadError')))
       .finally(() => setLoading(false));
-  }, [quizId]);
+  }, [quizId, t]);
 
   const handleSelect = (questionIndex: number, optionIndex: number) => {
     if (result) return; // déjà soumis
@@ -38,13 +40,13 @@ export default function QuizPage() {
       setResult(res);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
-      setError('Échec de la soumission.');
+      setError(t('quiz.submitError'));
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <p className="text-slate-500">Chargement du quiz…</p>;
+  if (loading) return <p className="text-slate-500">{t('quiz.loading')}</p>;
   if (error) return <p className="text-rose-600">{error}</p>;
   if (!quiz) return null;
 
@@ -56,7 +58,7 @@ export default function QuizPage() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900">{quiz.title}</h1>
         <p className="text-sm text-slate-500">
-          Quiz #{quiz.id} · {quiz.questions.length} questions
+          Quiz #{quiz.id} · {quiz.questions.length} {t('quiz.questions')}
         </p>
       </div>
 
@@ -76,15 +78,15 @@ export default function QuizPage() {
           </h2>
           <p className="text-slate-700">
             {result.score === 10
-              ? '🎉 Sans-faute ! Tu maitrises ce chapitre.'
+              ? t('quiz.scorePerfect')
               : result.score >= 7
-                ? '👍 Bon résultat. Revois les questions ratées en bas de page.'
+                ? t('quiz.scoreGood')
                 : result.score >= 4
-                  ? "📚 Tu as les bases, mais des révisions s'imposent."
-                  : '⚠️ Il faut reprendre le cours en profondeur.'}
+                  ? t('quiz.scoreMedium')
+                  : t('quiz.scoreBad')}
           </p>
           <Link to="/history" className="btn-secondary mt-4 inline-flex">
-            Retour à l'historique
+            {t('quiz.backHistory')}
           </Link>
         </div>
       )}
@@ -149,10 +151,10 @@ export default function QuizPage() {
           className="btn-signature w-full py-3 text-base"
         >
           {submitting
-            ? 'Correction en cours…'
+            ? t('quiz.submitting')
             : allAnswered
-              ? '🎯 Soumettre mes réponses'
-              : `Répondre à toutes les questions (${Object.keys(answers).length}/10)`}
+              ? t('quiz.submit')
+              : `${t('quiz.answered')} (${Object.keys(answers).length}/10)`}
         </button>
       )}
     </div>

@@ -1,10 +1,13 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import VerifyEmailBanner from '@/components/VerifyEmailBanner';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Layout() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { config } = useSiteConfig();
@@ -39,50 +42,52 @@ export default function Layout() {
             {user ? (
               <>
                 <Link to="/upload" className="text-slate-700 hover:text-indigo-600">
-                  Nouveau quiz
+                  {t('nav.newQuiz')}
                 </Link>
                 <Link
                   to="/dashboard"
                   className="text-slate-700 hover:text-indigo-600 hidden sm:inline"
                 >
-                  Tableau de bord
+                  {t('nav.dashboard')}
                 </Link>
                 <Link
                   to="/review"
                   className="text-slate-700 hover:text-indigo-600 hidden sm:inline"
                 >
-                  Révision
+                  {t('nav.review')}
                 </Link>
                 <Link to="/history" className="text-slate-700 hover:text-indigo-600">
-                  Historique
+                  {t('nav.history')}
                 </Link>
                 {user.is_staff && (
                   <Link to="/admin" className="text-amber-600 font-medium hover:text-amber-700">
-                    Admin
+                    {t('nav.admin')}
                   </Link>
                 )}
                 <span className="text-slate-500">|</span>
                 <Link
                   to="/profile"
                   className="text-slate-600 hover:text-indigo-600 hidden sm:inline"
-                  title="Mon profil"
+                  title={t('nav.profile')}
                 >
                   {user.first_name || user.email}
                 </Link>
                 <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                <LanguageSwitcher />
                 <button onClick={handleLogout} className="btn-secondary">
-                  Déconnexion
+                  {t('nav.logout')}
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login" className="text-slate-700 hover:text-indigo-600">
-                  Connexion
+                  {t('nav.login')}
                 </Link>
                 <Link to="/signup" className="btn-primary">
-                  S'inscrire
+                  {t('nav.signup')}
                 </Link>
                 <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                <LanguageSwitcher />
               </>
             )}
           </nav>

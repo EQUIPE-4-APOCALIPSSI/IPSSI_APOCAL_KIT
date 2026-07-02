@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { generateQuiz } from '@/api/llm';
 import { getApiErrorMessage } from '@/api/errors';
 
 export default function UploadPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [mode, setMode] = useState<'pdf' | 'text'>('text');
@@ -24,7 +26,7 @@ export default function UploadPage() {
       });
       navigate(`/quiz/${quiz.id}`);
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Échec de la génération.'));
+      setError(getApiErrorMessage(err, t('upload.error')));
     } finally {
       setLoading(false);
     }
@@ -32,10 +34,8 @@ export default function UploadPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 mb-2">Créer un nouveau quiz</h1>
-      <p className="text-slate-600 mb-6">
-        Uploade un PDF ou colle un texte. EduTutor IA génère 10 questions QCM.
-      </p>
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">{t('upload.title')}</h1>
+      <p className="text-slate-600 mb-6">{t('upload.subtitle')}</p>
 
       {error && (
         <div className="mb-4 p-3 bg-rose-50 border-l-4 border-rose-500 text-sm text-rose-900 rounded">
@@ -45,13 +45,15 @@ export default function UploadPage() {
 
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">Titre du cours</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            {t('upload.courseTitle')}
+          </label>
           <input
             type="text"
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Ex. Histoire — Révolution française"
+            placeholder={t('upload.placeholderTitle')}
             className="input"
           />
         </div>
@@ -67,7 +69,7 @@ export default function UploadPage() {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              📝 Texte collé
+              {t('upload.textMode')}
             </button>
             <button
               type="button"
@@ -78,7 +80,7 @@ export default function UploadPage() {
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
               }`}
             >
-              📄 PDF
+              {t('upload.pdfMode')}
             </button>
           </div>
 
@@ -89,7 +91,7 @@ export default function UploadPage() {
               minLength={200}
               value={sourceText}
               onChange={(e) => setSourceText(e.target.value)}
-              placeholder="Collez ici le texte de votre cours (au moins 200 caractères)…"
+              placeholder={t('upload.placeholderText')}
               className="input"
             />
           ) : (
@@ -103,26 +105,16 @@ export default function UploadPage() {
           )}
           {mode === 'text' && (
             <p className="text-xs text-slate-500 mt-1">
-              {sourceText.length} / 200 caractères minimum
+              {sourceText.length} / 200 {t('upload.charsMin')}
             </p>
           )}
         </div>
 
         <button type="submit" disabled={loading} className="btn-primary w-full">
-          {loading ? (
-            <>
-              <span className="animate-spin">⏳</span> Génération en cours… (1 à 5 min sur CPU,
-              patientez)
-            </>
-          ) : (
-            <>🚀 Générer le quiz</>
-          )}
+          {loading ? t('upload.loading') : t('upload.submit')}
         </button>
 
-        <p className="text-xs text-slate-500 text-center">
-          La génération peut prendre de 1 à 5 minutes selon votre machine (bien plus rapide avec un
-          GPU ou un modèle plus léger).
-        </p>
+        <p className="text-xs text-slate-500 text-center">{t('upload.desc')}</p>
       </form>
     </div>
   );
