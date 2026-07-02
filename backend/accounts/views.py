@@ -31,7 +31,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from quizzes.models import Question, Quiz
+from quizzes.models import Quiz
 
 from .emails import EmailError, send_password_reset_email, send_verification_email
 from .models import get_or_create_profile
@@ -386,8 +386,7 @@ class ExportDataView(APIView):
                         q.selected_index if q.selected_index is not None else "",
                         (
                             "OUI"
-                            if q.selected_index is not None
-                            and q.selected_index == q.correct_index
+                            if q.selected_index is not None and q.selected_index == q.correct_index
                             else "NON" if q.selected_index is not None else ""
                         ),
                     ]

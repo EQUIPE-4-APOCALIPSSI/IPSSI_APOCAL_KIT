@@ -16,7 +16,7 @@ import requests
 from django.conf import settings
 
 from .base import LLMClient, LLMError
-from .quiz_prompt import get_system_prompt, build_user_prompt, parse_and_validate_quiz
+from .quiz_prompt import build_user_prompt, get_system_prompt, parse_and_validate_quiz
 
 # L'API Gemini place le nom du modèle dans l'URL : .../models/<MODEL>:generateContent
 GEMINI_URL_TEMPLATE = (

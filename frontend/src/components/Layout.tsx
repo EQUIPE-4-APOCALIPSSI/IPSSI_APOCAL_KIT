@@ -7,7 +7,7 @@ import VerifyEmailBanner from '@/components/VerifyEmailBanner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Layout() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { config } = useSiteConfig();
