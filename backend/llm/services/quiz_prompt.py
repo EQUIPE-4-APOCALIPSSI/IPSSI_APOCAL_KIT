@@ -48,12 +48,12 @@ Règles ABSOLUES :
 - Sortie = JSON STRICT et UNIQUEMENT JSON.
 
 Format de sortie :
-{
+{{
   "questions": [
     {{"prompt": "...", "options": ["...","...","...","..."], "correct_index": 0}},
     ... (10 entrées)
   ]
-}
+}}
 """
 
 
