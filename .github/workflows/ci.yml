@@ -86,6 +86,9 @@ jobs:
       - name: Apply migrations
         run: python manage.py migrate --noinput
 
+      - name: Tests adversariaux — prompt injection (J3)
+        run: pytest llm/test_adversarial.py -v
+
       - name: Run pytest with coverage
         run: pytest --cov --cov-report=term-missing
 
