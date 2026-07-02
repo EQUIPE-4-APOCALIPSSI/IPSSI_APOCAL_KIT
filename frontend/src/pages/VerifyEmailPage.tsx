@@ -47,7 +47,7 @@ export default function VerifyEmailPage() {
         setStatus('error');
         setMessage(getApiErrorMessage(err, t('verify.error')));
       });
-  }, [token, refresh]);
+  }, [token, refresh, t]);
 
   const tone =
     status === 'success'
