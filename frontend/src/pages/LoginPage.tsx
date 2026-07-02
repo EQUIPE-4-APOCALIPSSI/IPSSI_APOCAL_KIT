@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { getApiErrorMessage } from '@/api/errors';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,7 +24,7 @@ export default function LoginPage() {
       await login(email, password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Identifiants invalides.'));
+      setError(getApiErrorMessage(err, t('login.error')));
     } finally {
       setLoading(false);
     }
@@ -31,11 +33,11 @@ export default function LoginPage() {
   return (
     <div className="max-w-md mx-auto">
       <div className="card">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Connexion</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">{t('login.title')}</h1>
         <p className="text-sm text-slate-500 mb-6">
-          Pas encore de compte ?{' '}
+          {t('login.noAccount')}{' '}
           <Link to="/signup" className="text-indigo-600 hover:underline">
-            S'inscrire
+            {t('login.signup')}
           </Link>
         </p>
 
@@ -47,7 +49,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('login.email')}</label>
             <input
               type="email"
               required
@@ -61,9 +63,9 @@ export default function LoginPage() {
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-medium text-slate-700">Mot de passe</label>
+              <label className="block text-sm font-medium text-slate-700">{t('login.password')}</label>
               <Link to="/forgot-password" className="text-xs text-indigo-600 hover:underline">
-                Mot de passe oublié ?
+                {t('login.forgot')}
               </Link>
             </div>
             <input
@@ -77,7 +79,7 @@ export default function LoginPage() {
           </div>
 
           <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? 'Connexion…' : 'Se connecter'}
+            {loading ? t('login.loading') : t('login.submit')}
           </button>
         </form>
       </div>
