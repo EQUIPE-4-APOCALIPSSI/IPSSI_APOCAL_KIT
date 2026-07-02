@@ -111,14 +111,7 @@ export default function UploadPage() {
         </div>
 
         <button type="submit" disabled={loading} className="btn-primary w-full">
-          {loading ? (
-            <>
-              <span className="animate-spin">⏳</span> Génération en cours… (1 à 5 min sur CPU,
-              patientez)
-            </>
-          ) : (
-            <>🚀 Générer le quiz</>
-          )}
+          {loading ? t('upload.loading') : t('upload.submit')}
         </button>
 
         <p className="text-xs text-slate-500 text-center">
