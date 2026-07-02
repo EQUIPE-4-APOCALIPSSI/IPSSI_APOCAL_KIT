@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { signup } from '@/api/auth';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,6 +7,7 @@ import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import { getApiErrorMessage } from '@/api/errors';
 
 export default function SignupPage() {
+  const { t } = useTranslation();
   const { refresh } = useAuth();
   const { config } = useSiteConfig();
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export default function SignupPage() {
       // Un bandeau (dans le Layout) invitera ensuite à confirmer l'email.
       navigate('/upload', { replace: true });
     } catch (err) {
-      setError(getApiErrorMessage(err, 'Inscription impossible.'));
+      setError(getApiErrorMessage(err, t('signup.error')));
     } finally {
       setLoading(false);
     }
@@ -44,12 +46,12 @@ export default function SignupPage() {
       <div className="max-w-md mx-auto">
         <div className="card text-center">
           <div className="text-4xl mb-3">🔒</div>
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Inscriptions fermées</h1>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">{t('signup.closed')}</h1>
           <p className="text-sm text-slate-500 mb-4">
-            Les inscriptions sont actuellement désactivées. Revenez plus tard.
+            {t('signup.closedDesc')}
           </p>
           <Link to="/login" className="text-indigo-600 hover:underline">
-            Déjà un compte ? Se connecter
+            {t('signup.alreadyAccount')}
           </Link>
         </div>
       </div>
@@ -59,11 +61,11 @@ export default function SignupPage() {
   return (
     <div className="max-w-md mx-auto">
       <div className="card">
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">Créer un compte</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">{t('signup.title')}</h1>
         <p className="text-sm text-slate-500 mb-6">
-          Déjà inscrit ?{' '}
+          {t('signup.alreadyLabel')}{' '}
           <Link to="/login" className="text-indigo-600 hover:underline">
-            Se connecter
+            {t('signup.login')}
           </Link>
         </p>
 
@@ -75,7 +77,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">{t('signup.email')}</label>
             <input
               type="email"
               required
@@ -90,7 +92,7 @@ export default function SignupPage() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Prénom <span className="text-slate-400 font-normal">(facultatif)</span>
+                {t('signup.firstName')} <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
               </label>
               <input
                 type="text"
@@ -102,7 +104,7 @@ export default function SignupPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Nom <span className="text-slate-400 font-normal">(facultatif)</span>
+                {t('signup.lastName')} <span className="text-slate-400 font-normal">{t('signup.optional')}</span>
               </label>
               <input
                 type="text"
@@ -116,8 +118,8 @@ export default function SignupPage() {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Mot de passe
-              <span className="text-slate-400 font-normal"> (≥ 8 caractères)</span>
+              {t('signup.password')}
+              <span className="text-slate-400 font-normal"> {t('signup.passwordHint')}</span>
             </label>
             <input
               type="password"
@@ -131,7 +133,7 @@ export default function SignupPage() {
           </div>
 
           <button type="submit" disabled={loading} className="btn-primary w-full">
-            {loading ? 'Création du compte…' : 'Créer mon compte'}
+            {loading ? t('signup.loading') : t('signup.submit')}
           </button>
         </form>
       </div>
