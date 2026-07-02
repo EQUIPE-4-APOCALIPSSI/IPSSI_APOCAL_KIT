@@ -247,11 +247,8 @@ export default function ProfilePage() {
 
       {/* Export RGPD (US-15) — Droit d'accès Art. 15 */}
       <section className="card border-l-4 border-indigo-500">
-        <h2 className="text-lg font-semibold text-slate-900 mb-2">🛡️ Mes données (RGPD)</h2>
-        <p className="text-sm text-slate-500 mb-4">
-          Conformément à l'Article 15 du RGPD, vous pouvez exporter toutes vos données personnelles
-          : profil, quiz, réponses, historique.
-        </p>
+        <h2 className="text-lg font-semibold text-slate-900 mb-2">{t('profile.exportTitle')}</h2>
+        <p className="text-sm text-slate-500 mb-4">{t('profile.exportDesc')}</p>
         {exportMsg && (
           <div className="mb-4 p-3 bg-emerald-50 border-l-4 border-emerald-500 text-sm text-emerald-900 rounded">
             {exportMsg}
@@ -268,11 +265,9 @@ export default function ProfilePage() {
           disabled={exportLoading}
           className="btn-primary inline-flex items-center gap-2"
         >
-          {exportLoading ? <>Préparation de l'archive…</> : <>📦 Exporter mes données (ZIP)</>}
+          {exportLoading ? <>{t('profile.exportLoading')}</> : <>{t('profile.exportSubmit')}</>}
         </button>
-        <p className="text-xs text-slate-400 mt-2">
-          L'archive contient vos informations personnelles, quiz et réponses au format JSON + CSV.
-        </p>
+        <p className="text-xs text-slate-400 mt-2">{t('profile.exportHint')}</p>
       </section>
 
       {/* Zone 3 : danger */}

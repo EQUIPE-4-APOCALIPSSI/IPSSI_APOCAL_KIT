@@ -14,7 +14,7 @@
     "logout": "Logout"
   },
   "home": {
-    "title": "Study better, with AI.",
+    "title": "Study better, <1>with AI.</1>",
     "subtitle": "Upload your course, get 10 MCQ questions, correction and gap analysis. All on your machine.",
     "createQuiz": "Create a quiz",
     "myHistory": "My history",
@@ -26,7 +26,8 @@
     "cardQcmDesc": "Llama 3.1 8B via Ollama. No paid API, no data leaks.",
     "cardProgress": "Track your progress",
     "cardProgressDesc": "Score history, identified gaps (Release 2).",
-    "banner": "APOCAL'IPSSI 2026 starter kit."
+    "banner": "APOCAL'IPSSI 2026 starter kit.",
+    "bannerDesc": "This frontend is intentionally minimal — it's up to you to enhance it during the week. Check the"
   },
   "login": {
     "title": "Login",
@@ -182,7 +183,7 @@
     "redo": "Retake this quiz →",
     "correctAnswer": "✓ Correct",
     "wrongAnswer": "✗ Your answer",
-    "fromQuiz": "From quiz"
+    "fromQuiz": "From quiz « {{title}} »"
   },
   "footer": {
     "mentions": "Legal notice",

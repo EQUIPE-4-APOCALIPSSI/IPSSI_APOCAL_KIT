@@ -95,7 +95,9 @@ export default function ReviewMistakesPage() {
                   />
                 ))}
               </div>
-              <p className="text-xs text-slate-400 mt-2">Issue du quiz « {m.quiz_title} ».</p>
+              <p className="text-xs text-slate-400 mt-2">
+                {t('review.fromQuiz', { title: m.quiz_title })}
+              </p>
             </div>
           ))}
         </div>

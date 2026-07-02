@@ -14,7 +14,7 @@
     "logout": "Déconnexion"
   },
   "home": {
-    "title": "Révise mieux, grâce à l'IA.",
+    "title": "Révise mieux, <1>grâce à l'IA.</1>",
     "subtitle": "Upload ton cours, EduTutor te génère 10 questions QCM, te corrige et identifie tes lacunes. Le tout sur ta machine, en open source.",
     "createQuiz": "Créer un quiz",
     "myHistory": "Voir mon historique",
@@ -26,7 +26,8 @@
     "cardQcmDesc": "Llama 3.1 8B via Ollama. Aucune API payante, aucune fuite de données.",
     "cardProgress": "Mesure ta progression",
     "cardProgressDesc": "Historique des scores, lacunes identifiées (extension Release 2).",
-    "banner": "Kit de démarrage APOCAL'IPSSI 2026."
+    "banner": "Kit de démarrage APOCAL'IPSSI 2026.",
+    "bannerDesc": "Ce frontend est volontairement minimaliste — c'est à vous de l'enrichir pendant la semaine. Consultez le"
   },
   "login": {
     "title": "Connexion",
@@ -182,7 +183,7 @@
     "redo": "Refaire ce quiz →",
     "correctAnswer": "✓ Bonne réponse",
     "wrongAnswer": "✗ Votre réponse",
-    "fromQuiz": "Issue du quiz"
+    "fromQuiz": "Issue du quiz « {{title}} »"
   },
   "footer": {
     "mentions": "Mentions légales",
