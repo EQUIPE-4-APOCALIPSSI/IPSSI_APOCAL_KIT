@@ -17,7 +17,7 @@ import requests
 from django.conf import settings
 
 from .base import LLMClient, LLMError
-from .quiz_prompt import SYSTEM_PROMPT, build_user_prompt, parse_and_validate_quiz
+from .quiz_prompt import get_system_prompt, build_user_prompt, parse_and_validate_quiz
 
 
 class OpenAICompatibleClient(LLMClient):
@@ -59,7 +59,7 @@ class OpenAICompatibleClient(LLMClient):
             "model": self.model,
             # Séparation system / user (défense de base contre l'injection, cf. J3).
             "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": get_system_prompt()},
                 {"role": "user", "content": build_user_prompt(source_text, title)},
             ],
             "temperature": 0.4,
