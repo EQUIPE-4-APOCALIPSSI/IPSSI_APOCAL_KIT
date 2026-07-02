@@ -14,7 +14,7 @@
  *   portabilité) — placeholder présent plus bas, à implémenter pendant la semaine.
  * [TODO J4] Ajouter un bouton « Signaler un contenu / un quiz » — placeholder.
  */
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -22,7 +22,7 @@ import { changePassword, deleteAccount, exportData, updateProfile } from '@/api/
 import { getApiErrorMessage } from '@/api/errors';
 
 export default function ProfilePage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, refresh } = useAuth();
   const navigate = useNavigate();
 
@@ -52,6 +52,18 @@ export default function ProfilePage() {
   const [delConfirm, setDelConfirm] = useState(false);
   const [delErr, setDelErr] = useState<string | null>(null);
   const [delLoading, setDelLoading] = useState(false);
+
+  // Effacer les messages quand la langue change (évite d'afficher une
+  // traduction périmée stockée dans le state).
+  useEffect(() => {
+    setInfoMsg(null);
+    setInfoErr(null);
+    setPwdMsg(null);
+    setPwdErr(null);
+    setExportMsg(null);
+    setExportErr(null);
+    setDelErr(null);
+  }, [i18n.language]);
 
   const handleInfo = async (e: FormEvent) => {
     e.preventDefault();
