@@ -4,7 +4,7 @@ import LegalScaffold, { type LegalSection } from './LegalScaffold';
 const SECTIONS: LegalSection[] = [
   {
     title: "Qu'est-ce qu'un cookie ?",
-    hint: "Un cookie est un petit fichier texte déposé sur le navigateur par un site visité. Il permet de stocker des informations temporaires pour améliorer la navigation. Le localStorage utilisé par EduTutor IA est une technologie similaire : les données restent sur le navigateur et ne sont pas transmises à des tiers.",
+    hint: 'Un cookie est un petit fichier texte déposé sur le navigateur par un site visité. Il permet de stocker des informations temporaires pour améliorer la navigation. Le localStorage utilisé par EduTutor IA est une technologie similaire : les données restent sur le navigateur et ne sont pas transmises à des tiers.',
   },
   {
     title: 'Stockages utilisés',
@@ -12,7 +12,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Finalité de chaque stockage',
-    hint: "• apocal_token : maintien de la session connectée (nécessaire au fonctionnement)\n• apocal_theme : mémorisation du choix de thème visuel (confort utilisateur)\nStrictement technique — aucune donnée de navigation, aucune piste de suivi publicitaire.",
+    hint: '• apocal_token : maintien de la session connectée (nécessaire au fonctionnement)\n• apocal_theme : mémorisation du choix de thème visuel (confort utilisateur)\nStrictement technique — aucune donnée de navigation, aucune piste de suivi publicitaire.',
   },
   {
     title: 'Consentement',
@@ -24,7 +24,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Gérer les cookies',
-    hint: "Vous pouvez supprimer les données de localStorage à tout moment :\n• Chrome : Paramètres → Confidentialité → Effacer les données de navigation → Cookies et autres données\n• Firefox : Paramètres → Vie privée → Cookies et données → Gérer les données\n• Safari : Réglages → Confidentialité → Gérer les données\n• Ou simplement : F12 → Application → Local Storage → Effacer\nLa suppression du token entraînera une déconnexion (simple reconnexion).",
+    hint: 'Vous pouvez supprimer les données de localStorage à tout moment :\n• Chrome : Paramètres → Confidentialité → Effacer les données de navigation → Cookies et autres données\n• Firefox : Paramètres → Vie privée → Cookies et données → Gérer les données\n• Safari : Réglages → Confidentialité → Gérer les données\n• Ou simplement : F12 → Application → Local Storage → Effacer\nLa suppression du token entraînera une déconnexion (simple reconnexion).',
   },
 ];
 

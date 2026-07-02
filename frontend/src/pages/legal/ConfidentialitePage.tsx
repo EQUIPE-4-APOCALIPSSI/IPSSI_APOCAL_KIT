@@ -16,7 +16,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Base légale',
-    hint: "Le traitement repose sur :\n• Contrat (Art. 6.1.b RGPD) : création du compte, génération de quiz, correction\n• Intérêt légitime (Art. 6.1.f RGPD) : statistiques de progression, sécurité\n• Consentement (Art. 6.1.a RGPD) : pour les cookies non essentiels\n• Obligation légale (Art. 6.1.c RGPD) : conservation des données pour conformité RGPD",
+    hint: 'Le traitement repose sur :\n• Contrat (Art. 6.1.b RGPD) : création du compte, génération de quiz, correction\n• Intérêt légitime (Art. 6.1.f RGPD) : statistiques de progression, sécurité\n• Consentement (Art. 6.1.a RGPD) : pour les cookies non essentiels\n• Obligation légale (Art. 6.1.c RGPD) : conservation des données pour conformité RGPD',
   },
   {
     title: 'Durée de conservation',
@@ -32,7 +32,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Vos droits',
-    hint: "Conformément au RGPD, vous disposez des droits suivants, exerçables depuis votre page /profile :\n• Accès (Art. 15) : bouton « Exporter mes données » → ZIP\n• Rectification (Art. 16) : modifier votre profil en ligne\n• Effacement (Art. 17) : supprimer votre compte (zone de danger)\n• Portabilité (Art. 20) : export ZIP en JSON + CSV\n• Opposition (Art. 21) : nous contacter par email\n• Réclamation (Art. 77) : saisir la CNIL — www.cnil.fr",
+    hint: 'Conformément au RGPD, vous disposez des droits suivants, exerçables depuis votre page /profile :\n• Accès (Art. 15) : bouton « Exporter mes données » → ZIP\n• Rectification (Art. 16) : modifier votre profil en ligne\n• Effacement (Art. 17) : supprimer votre compte (zone de danger)\n• Portabilité (Art. 20) : export ZIP en JSON + CSV\n• Opposition (Art. 21) : nous contacter par email\n• Réclamation (Art. 77) : saisir la CNIL — www.cnil.fr',
   },
   {
     title: 'Cookies',
@@ -40,7 +40,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Contact & réclamation',
-    hint: "Référent données : equipe4@edututor-ia.fr\nDroit de réclamation auprès de la CNIL : 3 Place de Fontenoy, 75007 Paris — www.cnil.fr",
+    hint: 'Référent données : equipe4@edututor-ia.fr\nDroit de réclamation auprès de la CNIL : 3 Place de Fontenoy, 75007 Paris — www.cnil.fr',
   },
 ];
 

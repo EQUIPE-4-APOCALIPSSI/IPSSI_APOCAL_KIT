@@ -12,7 +12,7 @@ const SECTIONS: LegalSection[] = [
   },
   {
     title: 'Hébergeur',
-    hint: "Infrastructure Docker déployée sur VPS OVH\nOVH SAS — 2 rue Kellermann, 59100 Roubaix, France\nTél. : 1007\nLes données sont hébergées dans la région Gravelines (France).",
+    hint: 'Infrastructure Docker déployée sur VPS OVH\nOVH SAS — 2 rue Kellermann, 59100 Roubaix, France\nTél. : 1007\nLes données sont hébergées dans la région Gravelines (France).',
   },
   {
     title: 'Propriété intellectuelle',

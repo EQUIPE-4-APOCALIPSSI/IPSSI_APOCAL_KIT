@@ -42,8 +42,8 @@ export default function LegalScaffold({ title, intro, sections, children }: Prop
       {children}
 
       <p className="text-xs text-slate-400 mt-10 pt-4 border-t border-slate-200">
-        Dernière mise à jour : <em>le 01 juillet 2026</em>. Document rédigé dans le cadre pédagogique
-        APOCAL'IPSSI 2026.
+        Dernière mise à jour : <em>le 01 juillet 2026</em>. Document rédigé dans le cadre
+        pédagogique APOCAL'IPSSI 2026.
       </p>
     </article>
   );
