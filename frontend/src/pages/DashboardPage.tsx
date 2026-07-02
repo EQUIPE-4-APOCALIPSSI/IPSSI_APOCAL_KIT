@@ -120,10 +120,10 @@ export default function DashboardPage() {
 
           <div className="flex gap-3">
             <Link to="/review" className="btn-secondary">
-              📕 Réviser mes erreurs
+              📕 {t('dashboard.reviewErrors')}
             </Link>
             <Link to="/history" className="btn-secondary">
-              📚 Voir l'historique
+              📚 {t('dashboard.viewHistory')}
             </Link>
           </div>
         </>
