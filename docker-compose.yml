@@ -90,7 +90,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    command: npm run dev -- --host 0.0.0.0
+    command: sh -c "[ -d node_modules/react-i18next ] || npm install --no-audit --no-fund && npm run dev -- --host 0.0.0.0"
 
 volumes:
   postgres-data:
