@@ -7,6 +7,7 @@
  * pour faire disparaître le bandeau « email non confirmé ».
  */
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { verifyEmail } from '@/api/auth';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,12 +16,13 @@ import { getApiErrorMessage } from '@/api/errors';
 type Status = 'loading' | 'success' | 'error';
 
 export default function VerifyEmailPage() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const { refresh } = useAuth();
   const token = params.get('token') ?? '';
 
   const [status, setStatus] = useState<Status>('loading');
-  const [message, setMessage] = useState('Validation en cours…');
+  const [message, setMessage] = useState(t('verify.loading'));
   // Évite un double appel en mode StrictMode (React 18 monte deux fois en dev).
   const done = useRef(false);
 
@@ -30,7 +32,7 @@ export default function VerifyEmailPage() {
 
     if (!token) {
       setStatus('error');
-      setMessage('Lien de validation incomplet (token manquant).');
+      setMessage(t('verify.missingToken'));
       return;
     }
 
@@ -43,7 +45,7 @@ export default function VerifyEmailPage() {
       })
       .catch((err) => {
         setStatus('error');
-        setMessage(getApiErrorMessage(err, 'Lien de validation invalide ou expiré.'));
+        setMessage(getApiErrorMessage(err, t('verify.error')));
       });
   }, [token, refresh]);
 
@@ -57,16 +59,16 @@ export default function VerifyEmailPage() {
   return (
     <div className="max-w-md mx-auto">
       <div className="card">
-        <h1 className="text-2xl font-bold text-slate-900 mb-4">Confirmation d'email</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-4">{t('verify.success')}</h1>
 
         <div className={`p-3 border-l-4 text-sm rounded ${tone}`}>{message}</div>
 
         <div className="mt-6 flex gap-4 text-sm">
           <Link to="/upload" className="text-indigo-600 hover:underline">
-            Aller à l'application
+            {t('verify.goApp')}
           </Link>
           <Link to="/login" className="text-indigo-600 hover:underline">
-            Se connecter
+            {t('verify.login')}
           </Link>
         </div>
       </div>
