@@ -1,10 +1,13 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useSiteConfig } from '@/contexts/SiteConfigContext';
 import VerifyEmailBanner from '@/components/VerifyEmailBanner';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Layout() {
+  const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { config } = useSiteConfig();
@@ -70,6 +73,7 @@ export default function Layout() {
                   {user.first_name || user.email}
                 </Link>
                 <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                <LanguageSwitcher />
                 <button onClick={handleLogout} className="btn-secondary">
                   Déconnexion
                 </button>
@@ -83,6 +87,7 @@ export default function Layout() {
                   S'inscrire
                 </Link>
                 <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                <LanguageSwitcher />
               </>
             )}
           </nav>
