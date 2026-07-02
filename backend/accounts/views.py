@@ -9,19 +9,29 @@ Endpoints d'authentification (Lot 3 : email-identifiant + validation + reset).
     POST /api/accounts/resend-verification/      — renvoyer l'email de validation
     POST /api/accounts/password-reset/           — demander un reset (envoie un email)
     POST /api/accounts/password-reset/confirm/   — définir le nouveau mot de passe
+    GET  /api/accounts/me/export/                — exporter ses données (RGPD Art. 15)
 """
 
+import csv
+import hashlib
+import io
+import json
 import logging
+import zipfile
 
 from django.contrib.auth import login as django_login
 from django.contrib.auth import logout as django_logout
 from django.contrib.auth.models import User
+from django.http import FileResponse
+from django.utils import timezone
 from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from quizzes.models import Quiz
 
 from .emails import EmailError, send_password_reset_email, send_verification_email
 from .models import get_or_create_profile
@@ -278,6 +288,152 @@ class ProfileView(APIView):
         django_logout(request)
         user.delete()  # supprime aussi le Profile (on_delete=CASCADE)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# ---------------------------------------------------------------------------
+# Export RGPD (US-15) — Droit d'accès Art. 15
+# ---------------------------------------------------------------------------
+
+
+class ExportDataView(APIView):
+    """Exporte toutes les données de l'utilisateur connecté (RGPD Art. 15).
+
+    Génère une archive ZIP contenant :
+      - user.json          : profil, email, date d'inscription
+      - quizzes.json       : tous les quiz et leurs questions
+      - reponses.csv       : toutes les réponses (format tabulaire)
+      - audit.json         : métadonnées de l'export (date, nombre d'éléments)
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                description="Archive ZIP contenant toutes les données utilisateur."
+            )
+        }
+    )
+    def get(self, request):
+        user = request.user
+        profile = get_or_create_profile(user)
+        quizzes = Quiz.objects.filter(user=user).prefetch_related("questions")
+        now = timezone.now()
+
+        # --- 1. user.json ---
+        user_data = {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "date_joined": user.date_joined.isoformat(),
+            "email_verified": profile.email_verified,
+            "is_staff": user.is_staff,
+            "is_active": user.is_active,
+        }
+
+        # --- 2. quizzes.json ---
+        quizzes_data = []
+        for quiz in quizzes:
+            questions_data = []
+            for q in quiz.questions.all():
+                questions_data.append(
+                    {
+                        "index": q.index,
+                        "prompt": q.prompt,
+                        "options": q.options,
+                        "correct_index": q.correct_index,
+                        "selected_index": q.selected_index,
+                    }
+                )
+            quizzes_data.append(
+                {
+                    "id": quiz.id,
+                    "title": quiz.title,
+                    "source_text": quiz.source_text[:500],  # tronqué, complet dans le CSV
+                    "score": quiz.score,
+                    "created_at": quiz.created_at.isoformat(),
+                    "updated_at": quiz.updated_at.isoformat(),
+                    "questions": questions_data,
+                }
+            )
+
+        # --- 3. reponses.csv ---
+        csv_buffer = io.StringIO()
+        writer = csv.writer(csv_buffer)
+        writer.writerow(
+            [
+                "quiz_id",
+                "quiz_title",
+                "question_index",
+                "question_prompt",
+                "options",
+                "correct_index",
+                "selected_index",
+                "is_correct",
+            ]
+        )
+        for quiz in quizzes:
+            for q in quiz.questions.all():
+                writer.writerow(
+                    [
+                        quiz.id,
+                        quiz.title,
+                        q.index,
+                        q.prompt,
+                        " | ".join(q.options),
+                        q.correct_index,
+                        q.selected_index if q.selected_index is not None else "",
+                        (
+                            "OUI"
+                            if q.selected_index is not None and q.selected_index == q.correct_index
+                            else "NON" if q.selected_index is not None else ""
+                        ),
+                    ]
+                )
+
+        # --- 4. audit.json ---
+        audit_data = {
+            "export_date": now.isoformat(),
+            "user_id": user.id,
+            "user_email": user.email,
+            "total_quizzes": quizzes.count(),
+            "total_questions": sum(q.questions.count() for q in quizzes),
+            "purpose": "Droit d'accès (Art. 15 RGPD) — export de toutes les données personnelles.",
+            "retention_policy": "Les données sont conservées 3 ans après la dernière activité. "
+            "Voir /docs/legal/retention.md",
+            "generated_by": "EduTutor IA — APOCAL'IPSSI 2026",
+        }
+
+        # --- Assemblage du ZIP ---
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zf:
+            zf.writestr("user.json", json.dumps(user_data, indent=2, ensure_ascii=False))
+            zf.writestr("quizzes.json", json.dumps(quizzes_data, indent=2, ensure_ascii=False))
+            zf.writestr("reponses.csv", csv_buffer.getvalue())
+            zf.writestr("audit.json", json.dumps(audit_data, indent=2, ensure_ascii=False))
+
+        zip_buffer.seek(0)
+        file_bytes = zip_buffer.getvalue()
+        file_hash = hashlib.sha256(file_bytes).hexdigest()
+
+        # Audit trail SAR (J3-bis) : enregistrer la demande
+        from .models import DataRequest
+
+        DataRequest.objects.create(
+            user=user,
+            status=DataRequest.Status.RESPONDED,
+            responded_at=now,
+            exported_file_hash=file_hash,
+        )
+
+        filename = f"edututor-export-{user.id}-{now.strftime('%Y%m%d')}.zip"
+        return FileResponse(
+            io.BytesIO(file_bytes),
+            as_attachment=True,
+            filename=filename,
+            content_type="application/zip",
+        )
 
 
 class ChangePasswordView(APIView):
